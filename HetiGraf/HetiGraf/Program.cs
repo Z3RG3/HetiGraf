@@ -21,7 +21,9 @@ internal class Program
         graph.AddNode(zack);
         graph.AddNode(peter);
         graph.AddNode(janet);
-
+        
+            
+            graph.EdgeAdded += Graph_EdgeAdded; //4 +felirat, 5 trigger eventek <
         graph.AddEdge(stew, joseph); 
         graph.AddEdge(stew, marge); 
         graph.AddEdge(joseph, marge); 
@@ -30,12 +32,35 @@ internal class Program
         graph.AddEdge(gerald, zack); 
         graph.AddEdge(zack, peter); 
         graph.AddEdge(peter, janet); 
-
-        graph.SetExternalProcessor(Console.WriteLine);
-        graph.TraverseGraph();
         
         graph.SetExternalProcessor(AppendToFile);
         graph.TraverseGraph();
+
+            graph.BFSCompleted += Graph_BFSCompleted;
+        Console.WriteLine("BFS eredmény:");
+        graph.BFS(janet, gerald);
+        
+    }
+    static void Graph_BFSCompleted(object sender, BFSCompletedEventArgs<Person> e)
+    {
+        if (e.CurrentNode != null)
+        {
+            Console.Write(e.CurrentNode.ToString() + ", ");
+        }
+
+        if (e.CurrentNode != null && e.CurrentNode.Equals(e.Target))
+        {
+            Console.WriteLine("\nIsmeretség foka: " + (e.CurrentPath.Count - 1));
+            Console.WriteLine("Ismeretség útvonal: " + string.Join(" -> ", e.CurrentPath));
+        }
+        else
+        {
+            Console.WriteLine("Nincs kapcsolat a két személy között.");
+        }
+    }
+    static void Graph_EdgeAdded(object source, GraphEventArgs<Person> args) // event kezelo
+    {
+        Console.WriteLine($"Edge added between {args.NodeA} and {args.NodeB}");
     }
    public static void AppendToFile(string item)
     {

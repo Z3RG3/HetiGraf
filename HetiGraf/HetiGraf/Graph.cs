@@ -1,9 +1,10 @@
 namespace HetiGraf;
 
+public delegate void GraphEventHandler<T>(object source, GraphEventArgs<T> geargs); //1 delegalt
 public class Graph<T>
 {
-        List<T> tartalom = new List<T>(); // gráf csúcsai
-        List<List<T>> szomszedsagiLista = new List<List<T>>();
+        List<T> nodes = new List<T>(); // gráf csúcsai
+        List<List<T>> neighboursList = new List<List<T>>();
         private Action<string> externalProcessor; // külső feldolgozó metódus referencia
 
         public void SetExternalProcessor(Action<string> processor)
@@ -13,7 +14,7 @@ public class Graph<T>
         
         public void TraverseGraph()
         {
-            foreach (var csucs in tartalom)
+            foreach (var csucs in nodes)
             {
                 ProcessItem(csucs);
             }
@@ -29,74 +30,123 @@ public class Graph<T>
         
         public void AddNode(T csucs)
         {
-            tartalom.Add(csucs);
-            szomszedsagiLista.Add(new List<T>());
+            nodes.Add(csucs);
+            neighboursList.Add(new List<T>());
         }
-
+      
+        public event GraphEventHandler<T> EdgeAdded; // 2 event
+        protected virtual void OnEdgeAdded(T from, T to)
+        {
+            EdgeAdded?.Invoke(this, new GraphEventArgs<T>(from, to));
+        }
         public void AddEdge(T from, T to)
         {
-            int indexFrom = tartalom.IndexOf(from);
-            int indexTo = tartalom.IndexOf(to);
+            int indexFrom = nodes.IndexOf(from);
+            int indexTo = nodes.IndexOf(to);
 
             // irányítatlan
-            szomszedsagiLista[indexFrom].Add(to);
-            szomszedsagiLista[indexTo].Add(from);
+            neighboursList[indexFrom].Add(to);
+            neighboursList[indexTo].Add(from);
+            
+            OnEdgeAdded(from, to); //3 event.?Invoke (meghivas)
         }
-
+        
         public bool HasEdge(T from, T to)
         {
-            int indexFrom = tartalom.IndexOf(from);
-            int indexTo = tartalom.IndexOf(to);
+            int indexFrom = nodes.IndexOf(from);
+            int indexTo = nodes.IndexOf(to);
 
-            return szomszedsagiLista[indexFrom].Contains(tartalom[indexTo]);
+            return neighboursList[indexFrom].Contains(nodes[indexTo]);
         }
 
         public List<T> Neighbors(T csucs)
         {
-            int index = tartalom.IndexOf(csucs);
-            return szomszedsagiLista[index];
+            int index = nodes.IndexOf(csucs);
+            return neighboursList[index];
         }
-
-        public void BFS(T start) // szélességi (Breadth First Search)
+        public event EventHandler<BFSCompletedEventArgs<T>> BFSCompleted;
+        public void BFS(T start, T target)
         {
-            Queue<T> S = new Queue<T>();
-            List<T> F = new List<T>();
+            Queue<Tuple<T, List<T>>> queue = new Queue<Tuple<T, List<T>>>();
+            List<T> visited = new List<T>();
 
-            S.Enqueue(start); // gráf csúcsai
-            F.Add(start); // feldolgozott/feldolgozandó elemek
+            queue.Enqueue(new Tuple<T, List<T>>(start, new List<T> { start }));
 
-            T k;
-            while (S.Count != 0)
+            while (queue.Count != 0)
             {
-                k = S.Dequeue();
-                Console.Write(k.ToString() + ", ");
-                foreach (T x in Neighbors(k))
+                var current = queue.Dequeue();
+                T currentNode = current.Item1;
+                List<T> currentPath = current.Item2;
+
+                //kiváltjuk az eseményt
+                OnBFSCompleted(currentNode, currentPath, target);
+
+                if (currentNode.Equals(target))
                 {
-                    if (!F.Contains(x))
+                    return;
+                }
+
+                foreach (T neighbor in Neighbors(currentNode))
+                {
+                    if (!visited.Contains(neighbor))
                     {
-                        S.Enqueue(x);
-                        F.Add(x);
+                        var newPath = new List<T>(currentPath) { neighbor };
+                        queue.Enqueue(new Tuple<T, List<T>>(neighbor, newPath));
+                        visited.Add(neighbor);
                     }
                 }
             }
+
+            // Ha nincs kapcsolat
+            OnBFSCompleted(default, null, target);
         }
 
+        protected virtual void OnBFSCompleted(T currentNode, List<T> currentPath, T target)
+        {
+            BFSCompleted?.Invoke(this, new BFSCompletedEventArgs<T>(currentNode, currentPath, target));
+        }
         public void DFS(T csucs) // mélységi (Depth First Search)
         {
-            List<T> F = new List<T>();
-            DFSRecursive(csucs, ref F);
+            List<T> visited = new List<T>();
+            DFSRecursive(csucs, ref visited);
         }
 
-        private void DFSRecursive(T k, ref List<T> F)
+        private void DFSRecursive(T k, ref List<T> visited)
         {
-            F.Add(k);
+            visited.Add(k);
             Console.Write(k.ToString() + ", ");
             foreach (T x in Neighbors(k))
             {
-                if (!F.Contains(x))
+                if (!visited.Contains(x))
                 {
-                    DFSRecursive(x, ref F);
+                    DFSRecursive(x, ref visited);
                 }
             }
         }
+        
+}
+public class BFSCompletedEventArgs<T> : EventArgs
+{
+    public T CurrentNode { get; }
+    public List<T> CurrentPath { get; }
+    public T Target { get; }
+
+    public BFSCompletedEventArgs(T currentNode, List<T> currentPath, T target)
+    {
+        CurrentNode = currentNode;
+        CurrentPath = currentPath;
+        Target = target;
+    }
+}
+
+public class GraphEventArgs<T> : EventArgs 
+{
+    public T NodeA { get; }
+    public T NodeB { get; }
+
+    public GraphEventArgs(T nodeA, T nodeB)
+    {
+        NodeA = nodeA;
+        NodeB = nodeB;
+    }
 }
