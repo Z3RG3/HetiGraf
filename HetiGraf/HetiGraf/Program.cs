@@ -4,27 +4,42 @@ internal class Program
 {
     public static void Main(string[] args)
     {
-        Graph<int> graph = new Graph<int>();
+        Graph<Person> graph = new Graph<Person>();
+        
+        Person stew = new Person("Stew");
+        Person joseph = new Person("Joseph");
+        Person marge = new Person("Marge");
+        Person gerald = new Person("Gerald");
+        Person zack = new Person("Zack");
+        Person peter = new Person("Peter");
+        Person janet = new Person("Janet");
+        
+        graph.AddNode(stew);
+        graph.AddNode(joseph);
+        graph.AddNode(marge);
+        graph.AddNode(gerald);
+        graph.AddNode(zack);
+        graph.AddNode(peter);
+        graph.AddNode(janet);
 
-        graph.AddNode(1);
-        graph.AddNode(2);
-        graph.AddNode(3);
+        graph.AddEdge(stew, joseph); 
+        graph.AddEdge(stew, marge); 
+        graph.AddEdge(joseph, marge); 
+        graph.AddEdge(joseph, gerald); 
+        graph.AddEdge(joseph, zack); 
+        graph.AddEdge(gerald, zack); 
+        graph.AddEdge(zack, peter); 
+        graph.AddEdge(peter, janet); 
 
-        graph.AddEdge(1, 2);
-        graph.AddEdge(2, 3);
-
-        // Teszteljük a külső feldolgozást
         graph.SetExternalProcessor(Console.WriteLine);
-
-        // Vagy használjuk a saját feldolgozó metódust (File-hez fűzés)
+        graph.TraverseGraph();
+        
         graph.SetExternalProcessor(AppendToFile);
-
-        // Bejárjuk a gráfot és alkalmazzuk a kiválasztott feldolgozó metódust
         graph.TraverseGraph();
     }
-    static void AppendToFile(string item)
+   public static void AppendToFile(string item)
     {
-        // Ebben a példában csak a konzolra írjuk ki, de itt lehetne tényleges fájlba fűzés
+        File.AppendAllText("output.txt", item + Environment.NewLine);
         Console.WriteLine("Append to file: " + item);
     }
     

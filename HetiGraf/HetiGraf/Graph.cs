@@ -57,7 +57,7 @@ public class Graph<T>
             return szomszedsagiLista[index];
         }
 
-        public void SzelessegiBejaras(T start)
+        public void BFS(T start) // szélességi (Breadth First Search)
         {
             Queue<T> S = new Queue<T>();
             List<T> F = new List<T>();
@@ -81,13 +81,13 @@ public class Graph<T>
             }
         }
 
-        public void MelysegiBejaras(T csucs)
+        public void DFS(T csucs) // mélységi (Depth First Search)
         {
             List<T> F = new List<T>();
-            MelysegiBejarasRek(csucs, ref F);
+            DFSRecursive(csucs, ref F);
         }
 
-        private void MelysegiBejarasRek(T k, ref List<T> F)
+        private void DFSRecursive(T k, ref List<T> F)
         {
             F.Add(k);
             Console.Write(k.ToString() + ", ");
@@ -95,7 +95,7 @@ public class Graph<T>
             {
                 if (!F.Contains(x))
                 {
-                    MelysegiBejarasRek(x, ref F);
+                    DFSRecursive(x, ref F);
                 }
             }
         }

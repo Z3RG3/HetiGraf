@@ -1,0 +1,15 @@
+/Users/z3rg3/RiderProjects/HetiGraf/HetiGraf/HetiGraf/bin/Debug/net6.0/HetiGraf
+/Users/z3rg3/RiderProjects/HetiGraf/HetiGraf/HetiGraf/bin/Debug/net6.0/HetiGraf.deps.json
+/Users/z3rg3/RiderProjects/HetiGraf/HetiGraf/HetiGraf/bin/Debug/net6.0/HetiGraf.runtimeconfig.json
+/Users/z3rg3/RiderProjects/HetiGraf/HetiGraf/HetiGraf/bin/Debug/net6.0/HetiGraf.dll
+/Users/z3rg3/RiderProjects/HetiGraf/HetiGraf/HetiGraf/bin/Debug/net6.0/HetiGraf.pdb
+/Users/z3rg3/RiderProjects/HetiGraf/HetiGraf/HetiGraf/obj/Debug/net6.0/HetiGraf.csproj.AssemblyReference.cache
+/Users/z3rg3/RiderProjects/HetiGraf/HetiGraf/HetiGraf/obj/Debug/net6.0/HetiGraf.GeneratedMSBuildEditorConfig.editorconfig
+/Users/z3rg3/RiderProjects/HetiGraf/HetiGraf/HetiGraf/obj/Debug/net6.0/HetiGraf.AssemblyInfoInputs.cache
+/Users/z3rg3/RiderProjects/HetiGraf/HetiGraf/HetiGraf/obj/Debug/net6.0/HetiGraf.AssemblyInfo.cs
+/Users/z3rg3/RiderProjects/HetiGraf/HetiGraf/HetiGraf/obj/Debug/net6.0/HetiGraf.csproj.CoreCompileInputs.cache
+/Users/z3rg3/RiderProjects/HetiGraf/HetiGraf/HetiGraf/obj/Debug/net6.0/HetiGraf.dll
+/Users/z3rg3/RiderProjects/HetiGraf/HetiGraf/HetiGraf/obj/Debug/net6.0/refint/HetiGraf.dll
+/Users/z3rg3/RiderProjects/HetiGraf/HetiGraf/HetiGraf/obj/Debug/net6.0/HetiGraf.pdb
+/Users/z3rg3/RiderProjects/HetiGraf/HetiGraf/HetiGraf/obj/Debug/net6.0/HetiGraf.genruntimeconfig.cache
+/Users/z3rg3/RiderProjects/HetiGraf/HetiGraf/HetiGraf/obj/Debug/net6.0/ref/HetiGraf.dll
