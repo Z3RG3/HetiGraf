@@ -65,7 +65,7 @@ public class Graph<T>
             return neighboursList[index];
         }
         public event EventHandler<BFSCompletedEventArgs<T>> BFSCompleted;
-        public void BFS(T start, T target)
+        public void BFS(T start, T target) // szellessegi Breadth First Search, hanyadfoku ismerettseg
         {
             Queue<Tuple<T, List<T>>> queue = new Queue<Tuple<T, List<T>>>();
             List<T> visited = new List<T>();
@@ -111,10 +111,10 @@ public class Graph<T>
             DFSRecursive(csucs, ref visited);
         }
 
-        private void DFSRecursive(T k, ref List<T> visited)
+        private void DFSRecursive(T k, ref List<T> visited) // melysegibejaras Depth First Search
         {
             visited.Add(k);
-            Console.Write(k.ToString() + ", ");
+            //CWline(k.ToString() + ", ");
             foreach (T x in Neighbors(k))
             {
                 if (!visited.Contains(x))
